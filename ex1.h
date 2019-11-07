@@ -7,6 +7,7 @@
 
 #include "Expression.h"
 #include "string"
+
 class Value : public Expression{
  private:
   double number;
@@ -44,13 +45,13 @@ class UnaryOperation : public Expression {
 class UPlus : public UnaryOperation {
  public:
   explicit UPlus(Expression* exp) : UnaryOperation(exp) {}
-  double calculate(Expression* exp);
+  double calculate() override;
 };
 
 class UMinus : public UnaryOperation {
  public:
   explicit UMinus(Expression* exp) : UnaryOperation(exp) {}
-  double calculate(Expression* exp);
+  double calculate() override;
 };
 
 class BinaryOperation : public Expression {

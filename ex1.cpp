@@ -48,12 +48,12 @@ void UnaryOperation::setExp(Expression* e) {
   this->exp = e;
 }
 
-double UPlus::calculate(Expression* exp) {
-  return exp->calculate();
+double UPlus::calculate() {
+  return this->getExp()->calculate();
 }
 
-double UMinus::calculate(Expression* exp) {
-  return -(exp->calculate());
+double UMinus::calculate() {
+  return -(this->getExp()->calculate());
 }
 
 Expression* BinaryOperation::getRight() {

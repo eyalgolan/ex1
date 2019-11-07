@@ -8,7 +8,7 @@
 int main() {
 
     std::cout << "Hello world" << std::endl;
-    /*
+
     // 1
     Variable *x1 = new Variable("x1", 3);// x1=3
     Expression* e1 = new Mul( new UMinus(new Value(5.0) ) , new Plus( new Value(3.5) , &(++(*x1))) );// -5*(3.5+(++x1))
@@ -28,7 +28,7 @@ int main() {
     Expression* e3 = new Mul(&(++(*x4)), &((*x5)++));// (++x4)*(x5++)
     cout << "3: " << e3->calculate() << endl; //-10.5
     delete e3;
-
+  /*
     // 4
     Interpreter* i1 = new Interpreter();
     Expression* e4 = i1->interpret("-(2*(3+4))");
@@ -65,7 +65,6 @@ int main() {
         }
         std::cout << e << std::endl;
     }
-
+*/
     return 0;
-     */
 }
