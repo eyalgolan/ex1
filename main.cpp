@@ -8,7 +8,6 @@
 int main() {
 
     std::cout << "Hello world" << std::endl;
-
     /*
     // 1
     Variable *x1 = new Variable("x1", 3);// x1=3
