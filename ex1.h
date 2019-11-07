@@ -11,7 +11,7 @@ class Value : public Expression{
  private:
   double number;
  public:
-  Value(double number) : number(number){}
+  explicit Value(double number) : number(number){}
   double calculate() override;
 };
 
@@ -36,20 +36,20 @@ class UnaryOperation : public Expression {
  protected:
   Expression* exp {nullptr};
  public:
-  UnaryOperation(Expression* exp) : exp(exp) {}
+  explicit UnaryOperation(Expression* exp) : exp(exp) {}
   Expression* getExp();
   void setExp(Expression* e);
 };
 
 class UPlus : public UnaryOperation {
  public:
-  UPlus(Expression* exp) : UnaryOperation(exp) {}
+  explicit UPlus(Expression* exp) : UnaryOperation(exp) {}
   double calculate(Expression* exp);
 };
 
 class UMinus : public UnaryOperation {
  public:
-  UMinus(Expression* exp) : UnaryOperation(exp) {}
+  explicit UMinus(Expression* exp) : UnaryOperation(exp) {}
   double calculate(Expression* exp);
 };
 
