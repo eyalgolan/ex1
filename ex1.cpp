@@ -2,6 +2,7 @@
 // Created by eyal on 07/11/19.
 //
 
+#include <stdexcept>
 #include "ex1.h"
 #include "Expression.h"
 #include "string"
@@ -82,5 +83,10 @@ double Mul::calculate() {
 }
 
 double Div::calculate() {
+  //if denominator is 0, throw runtime error
+  if (this->getRight()->calculate() == 0) {
+    throw runtime_error("Math Error: attempted divide by 0");
+  }
+  //otherwise calculate and return
   return this->getLeft()->calculate() / this->getRight()->calculate();
 }

@@ -65,7 +65,7 @@ class BinaryOperation : public Expression {
   Expression* left {nullptr};
 
  public:
-  BinaryOperation(Expression* right, Expression* left) : left(left), right(right) {}
+  BinaryOperation(Expression* left, Expression* right) : left(left), right(right) {}
   virtual ~BinaryOperation(){}
   Expression* getRight();
   Expression* getLeft();
@@ -75,28 +75,28 @@ class BinaryOperation : public Expression {
 
 class Plus : public BinaryOperation{
  public:
-  Plus(Expression* right, Expression* left) : BinaryOperation(right, left){}
+  Plus(Expression* left, Expression* right) : BinaryOperation(left, right){}
   virtual ~Plus(){}
   double calculate() override;
 };
 
 class Minus : public BinaryOperation{
  public:
-  Minus(Expression* right, Expression* left) : BinaryOperation(right, left){}
+  Minus(Expression* left, Expression* right) : BinaryOperation(left, right){}
   virtual ~Minus(){}
   double calculate() override;
 };
 
 class Mul : public BinaryOperation{
  public:
-  Mul(Expression* right, Expression* left) : BinaryOperation(right, left){}
+  Mul(Expression* left, Expression* right) : BinaryOperation(left, right){}
   virtual ~Mul(){}
   double calculate() override;
 };
 
 class Div : public BinaryOperation{
  public:
-  Div(Expression* right, Expression* left) : BinaryOperation(right, left){}
+  Div(Expression* left, Expression* right) : BinaryOperation(left, right){}
   virtual ~Div(){}
   double calculate() override;
 };

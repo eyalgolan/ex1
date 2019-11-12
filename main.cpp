@@ -34,6 +34,18 @@ int main() {
     Expression* e=new Mul( new UMinus(new Value(5.0)), new Plus( new Value(3.5) , x) );
     cout<< e->calculate() <<endl; //-37.5
     delete e;
+
+    // mytest1
+    Variable *x6 = new Variable("x6", 5.0);// x2=5.0
+    Variable *x7 = new Variable("x7", 0.0);// x3=0.0
+    try {
+      Expression* e4 = new Div(x6, new UMinus(new UPlus(new UMinus(x7))));// 5/-(+(-(0.0)))}
+      cout << "2: " << e4->calculate() << endl;
+    }
+    catch (runtime_error& e) {
+      cout << "Exception occurred: " << e.what()<< endl;
+    }
+    delete e2;
     /*
     // 4
     Interpreter* i1 = new Interpreter();
