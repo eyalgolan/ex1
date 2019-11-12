@@ -7,8 +7,6 @@
 
 int main() {
 
-    std::cout << "Hello world" << std::endl;
-
     // 1
     Variable *x1 = new Variable("x1", 3);// x1=3
     Expression* e1 = new Mul( new UMinus(new Value(5.0) ) , new Plus( new Value(3.5) , &(++(*x1))) );// -5*(3.5+(++x1))
@@ -28,7 +26,8 @@ int main() {
     Expression* e3 = new Mul(&(++(*x4)), &((*x5)++));// (++x4)*(x5++)
     cout << "3: " << e3->calculate() << endl; //-10.5
     delete e3;
-  /*
+
+    /*
     // 4
     Interpreter* i1 = new Interpreter();
     Expression* e4 = i1->interpret("-(2*(3+4))");
@@ -39,7 +38,7 @@ int main() {
     Interpreter* i2 = new Interpreter();
     i2->setVariables("x=2;y=4");
     i2->setVariables("x=3");
-    Expression* e5 = i2->interpret("2*(-x+y)");
+    Expression* e5 = i2->interpret("2*(-(x)+y)");
     std::cout << "5: " << e5->calculate() << std::endl;//2
     delete e5;
 
@@ -48,7 +47,7 @@ int main() {
     i3->setVariables("x=1.5;y=8.5");
     i2->setVariables("x=3");
     Expression* e6 = i3->interpret("-(-(-((x+0.5)*(y+(-3.5)))))");
-    std::cout << "6: " << e6->calculate() << std::endl;//-17.5
+    std::cout << "6: " << e6->calculate() << std::endl;//-10
     delete e6;
 
     Interpreter* i4 = new Interpreter();
@@ -65,6 +64,6 @@ int main() {
         }
         std::cout << e << std::endl;
     }
-*/
+    */
     return 0;
 }
