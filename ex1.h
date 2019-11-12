@@ -13,6 +13,7 @@ class Value : public Expression{
   double number;
  public:
   explicit Value(double number) : number(number){}
+  virtual ~Value(){}
   double calculate() override;
 };
 
@@ -22,6 +23,7 @@ class Variable : public Expression {
   double value;
  public:
   Variable(string name, double value) : name(name), value(value) {}
+  virtual ~Variable(){}
   double calculate() override;
   Variable& operator++();
   Variable& operator--();
@@ -38,6 +40,7 @@ class UnaryOperation : public Expression {
   Expression* exp {nullptr};
  public:
   explicit UnaryOperation(Expression* exp) : exp(exp) {}
+  virtual ~UnaryOperation(){}
   Expression* getExp();
   void setExp(Expression* e);
 };
@@ -45,12 +48,14 @@ class UnaryOperation : public Expression {
 class UPlus : public UnaryOperation {
  public:
   explicit UPlus(Expression* exp) : UnaryOperation(exp) {}
+  virtual ~UPlus(){}
   double calculate() override;
 };
 
 class UMinus : public UnaryOperation {
  public:
   explicit UMinus(Expression* exp) : UnaryOperation(exp) {}
+  virtual ~UMinus(){}
   double calculate() override;
 };
 
@@ -61,6 +66,7 @@ class BinaryOperation : public Expression {
 
  public:
   BinaryOperation(Expression* right, Expression* left) : left(left), right(right) {}
+  virtual ~BinaryOperation(){}
   Expression* getRight();
   Expression* getLeft();
   void setRight(Expression* r);
@@ -70,24 +76,28 @@ class BinaryOperation : public Expression {
 class Plus : public BinaryOperation{
  public:
   Plus(Expression* right, Expression* left) : BinaryOperation(right, left){}
+  virtual ~Plus(){}
   double calculate() override;
 };
 
 class Minus : public BinaryOperation{
  public:
   Minus(Expression* right, Expression* left) : BinaryOperation(right, left){}
+  virtual ~Minus(){}
   double calculate() override;
 };
 
 class Mul : public BinaryOperation{
  public:
   Mul(Expression* right, Expression* left) : BinaryOperation(right, left){}
+  virtual ~Mul(){}
   double calculate() override;
 };
 
 class Div : public BinaryOperation{
  public:
   Div(Expression* right, Expression* left) : BinaryOperation(right, left){}
+  virtual ~Div(){}
   double calculate() override;
 };
 #endif //EX1_EX1_H

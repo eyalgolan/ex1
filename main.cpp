@@ -27,6 +27,13 @@ int main() {
     cout << "3: " << e3->calculate() << endl; //-10.5
     delete e3;
 
+    // x=3
+    Variable *x = new Variable("x", 3);
+    ++(*x);// x=4/
+    // / -5*(3.5+x)
+    Expression* e=new Mul( new UMinus(new Value(5.0)), new Plus( new Value(3.5) , x) );
+    cout<< e->calculate() <<endl; //-37.5
+    delete e;
     /*
     // 4
     Interpreter* i1 = new Interpreter();
