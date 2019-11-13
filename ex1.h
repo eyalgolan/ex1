@@ -8,17 +8,20 @@
 #include "Expression.h"
 #include "string"
 #include <map>
-
+#include <queue>
 
 class Interpreter {
  private:
   map<string, double> inputs;
   bool varValidation (string input);
+  queue<char> convertInfixToPostfix(string input);
+  string queueToString(queue<char>postfix);
+  string convertVarToValue(string input);
  public:
   Interpreter(){};
   ~Interpreter(){};
   void setVariables (string input);
-  Expression* interpret (string input){}
+  Expression* interpret (string input){};
 };
 
 class Value : public Expression{

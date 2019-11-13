@@ -72,7 +72,7 @@ void Interpreter::setVariables (string input) {
 
 }
 
-Expression* Interpreter::interpret(string input){
+queue<char> Interpreter::convertInfixToPostfix (string input) {
   stack <char> opStack;
   queue <char> valQueue;
   queue <char> brackets;
@@ -87,7 +87,7 @@ Expression* Interpreter::interpret(string input){
         valQueue.push(opStack.top());
       }
 
-      //check legal brackets order
+        //check legal brackets order
       else if(input[i] == '(') {
         brackets.push(input[i]);
       }
@@ -99,6 +99,7 @@ Expression* Interpreter::interpret(string input){
           brackets.pop();
           while(!opStack.empty() || opStack.top() == '(') {
             valQueue.push(opStack.top());
+            opStack.pop();
           }
           //pop last (
           if(opStack.top() == '(') {
@@ -107,20 +108,48 @@ Expression* Interpreter::interpret(string input){
         }
       }
 
-      //handle operands
-      else if (isdigit(input[i])){
+        //push operator
+      else{
         opStack.push(input[i]);
       }
-      else {
-        throw runtime_error("not a valid operator or operand");
-      }
     }
-    //handle operands
-    else {
+      //handle operands
+    else if(isdigit(input[i])){
       valQueue.push(input[i]);
     }
+    else {
+      throw runtime_error("not a valid input for interpret");
+    }
   }
+  while(!opStack.empty()) {
+    valQueue.push(opStack.top());
+    opStack.pop();
+  }
+  return valQueue;
 }
+
+string Interpreter::queueToString(queue<char>postfix) {
+  string postfixInput[postfix.size()];
+  int i=0;
+  while(!postfix.empty()) {
+    postfixInput[i] = postfix.front();
+    postfix.pop();
+    i++;
+  }
+  return postfixInput;
+}
+
+string Interpreter::convertVarToValue(string input) {
+
+}
+Expression* Interpreter::interpret(string input){
+  input = convertVarToValue(input);
+  queue <char> postfix = convertInfixToPostfix();
+  input = queueToString(postfix);
+}
+
+
+
 double Value::calculate() {
     return this->number;
 }
