@@ -50,7 +50,7 @@ int main() {
         }
         std::cout << e << std::endl;
     }
-
+    /*
     // 4
     Interpreter* i1 = new Interpreter();
     Expression* e4 = nullptr;
@@ -67,7 +67,7 @@ int main() {
         }
         std::cout << e << std::endl;
     }
-
+    */
     // 5
     Interpreter* i2 = new Interpreter();
     Expression* e5 = nullptr;

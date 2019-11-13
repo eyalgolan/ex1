@@ -8,6 +8,8 @@
 #include "string"
 #include <map>
 #include "regex"
+#include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -19,24 +21,27 @@ bool Interpreter::varValidation(string input) {
   return false;
 }
 void Interpreter::setVariables (string input) {
+  //if (!varValidation(input)) {
+  //  throw runtime_error("incorrect input");
+  //}
   string word;
   string left;
   string right;
   string varName;
   bool isExp = false;
-  for (auto x : input) {
-    if (x == ';') {
-      for (auto y : word) {
-        if ( y == '=') {
+  for (int i = 0; i < input.length(); i++) {
+    if (input[i] == ';') {
+      for (int j = 0; j < word.length(); j++) {
+        if (word[j] == '=') {
           left = varName;
           varName = "";
           isExp = true;
         }
         else if (isExp) {
-          right = right + y;
+          right = right + word[j];
         }
         else {
-          varName = varName + y;
+          varName = varName + word[j];
         }
       }
       this->inputs.insert(pair<string, double>(left, stod(right)));
@@ -45,7 +50,74 @@ void Interpreter::setVariables (string input) {
       right="";
     }
     else {
-      word = word + x;
+      word = word + input[i];
+    }
+  }
+  if(input[input.length()-1] != ';') {
+    for (int j = 0; j < word.length(); j++) {
+      if (word[j] == '=') {
+        left = varName;
+        varName = "";
+        isExp = true;
+      }
+      else if (isExp) {
+        right = right + word[j];
+      }
+      else {
+        varName = varName + word[j];
+      }
+    }
+    this->inputs.insert(pair<string, double>(left, stod(right)));
+  }
+
+}
+
+Expression* Interpreter::interpret(string input){
+  stack <char> opStack;
+  queue <char> valQueue;
+  queue <char> brackets;
+
+  for (int i = 0; i < input.length(); i++) {
+    //check if input is operator
+    if(input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/' || input[i] == '(' || input[i] == ')' || input[i]=='.') {
+
+      //check for order of operators
+      if ((opStack.top()=='*' || opStack.top() == '/') && (input[i] == '+' || input[i] == '-'))
+      {
+        valQueue.push(opStack.top());
+      }
+
+      //check legal brackets order
+      else if(input[i] == '(') {
+        brackets.push(input[i]);
+      }
+      else if(input[i] == ')') {
+        if(brackets.empty()){
+          throw runtime_error("illegal order of brackets");
+        }
+        else {
+          brackets.pop();
+          while(!opStack.empty() || opStack.top() == '(') {
+            valQueue.push(opStack.top());
+          }
+          //pop last (
+          if(opStack.top() == '(') {
+            opStack.pop();
+          }
+        }
+      }
+
+      //handle operands
+      else if (isdigit(input[i])){
+        opStack.push(input[i]);
+      }
+      else {
+        throw runtime_error("not a valid operator or operand");
+      }
+    }
+    //handle operands
+    else {
+      valQueue.push(input[i]);
     }
   }
 }
