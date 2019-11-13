@@ -6,8 +6,49 @@
 #include "ex1.h"
 #include "Expression.h"
 #include "string"
+#include <map>
+#include "regex"
 
+using namespace std;
 
+bool Interpreter::varValidation(string input) {
+  regex stringPattern("([a-zA-Z]+[_a-zA-Z0-9]*=[0-9].?[0-9]+[0-9]*;)+");
+  if (regex_match(input, stringPattern)) {
+    return true;
+  }
+  return false;
+}
+void Interpreter::setVariables (string input) {
+  string word;
+  string left;
+  string right;
+  string varName;
+  bool isExp = false;
+  for (auto x : input) {
+    if (x == ';') {
+      for (auto y : word) {
+        if ( y == '=') {
+          left = varName;
+          varName = "";
+          isExp = true;
+        }
+        else if (isExp) {
+          right = right + y;
+        }
+        else {
+          varName = varName + y;
+        }
+      }
+      this->inputs.insert(pair<string, double>(left, stod(right)));
+      isExp = false;
+      word = "";
+      right="";
+    }
+    else {
+      word = word + x;
+    }
+  }
+}
 double Value::calculate() {
     return this->number;
 }

@@ -7,6 +7,19 @@
 
 #include "Expression.h"
 #include "string"
+#include <map>
+
+
+class Interpreter {
+ private:
+  map<string, double> inputs;
+  bool varValidation (string input);
+ public:
+  Interpreter(){};
+  ~Interpreter(){};
+  void setVariables (string input);
+  Expression* interpret (string input){}
+};
 
 class Value : public Expression{
  private:
