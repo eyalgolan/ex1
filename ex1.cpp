@@ -2,6 +2,7 @@
 // Created by eyal on 07/11/19.
 //
 
+#include <iostream>
 #include <stdexcept>
 #include "ex1.h"
 #include "Expression.h"
@@ -10,6 +11,7 @@
 #include "regex"
 #include <stack>
 #include <queue>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -71,61 +73,72 @@ void Interpreter::setVariables (string input) {
   }
 }
 
-queue<char> Interpreter::convertInfixToPostfix (string input) {
+int Interpreter::precidense(char curr) {
+  int pr = -1;
+  switch(curr) {
+    default: break;
+    case '+': pr=1; break;
+    case '-': pr=1; break;
+    case '*': pr=2; break;
+    case '/': pr=2; break;
+    case '$': pr=3; break;
+    case '#': pr=3; break;
+  }
+  return pr;
+}
+deque<char> Interpreter::convertInfixToPostfix (string input) {
   stack <char> opStack;
-  queue <char> valQueue;
-  queue <char> brackets;
+  deque <char> valQueue;
 
-  for (int i = 0; i < input.length(); i++) {
-    //check if input is operator
-    if(input[i] == '+' || input[i] == '-' || input[i] == '*' || input[i] == '/' || input[i] == '(' || input[i] == ')' || input[i]=='.') {
-
-      //check for order of operators
-      if ((opStack.top()=='*' || opStack.top() == '/') && (input[i] == '+' || input[i] == '-'))
-      {
-        valQueue.push(opStack.top());
-        opStack.pop();
-        opStack.push(input[i]);
-      }
-
-        //check legal brackets order
-      else if(input[i] == '(') {
-        brackets.push(input[i]);
-      }
-      else if(input[i] == ')') {
-        if(brackets.empty()){
-          throw runtime_error("illegal order of brackets");
+  for(int i=0; i<input.length(); i++) {
+    char curr = input[i];
+    if(isdigit(curr)) {
+      valQueue.push_back(curr);
+    }
+    else if(curr == '+' || curr == '-' || curr == '*' || curr == '/') {
+      if((curr=='+' || curr=='-') && i==0) {
+        if(curr=='+') {
+          curr='$';
         }
         else {
-          brackets.pop();
-          while(!opStack.empty() || opStack.top() == '(') {
-            valQueue.push(opStack.top());
-            opStack.pop();
-          }
-          //pop last (
-          if(opStack.top() == '(') {
-            opStack.pop();
-          }
+          curr='#';
         }
       }
-
-        //push operator
-      else{
-        opStack.push(input[i]);
+      else if ((curr=='+' || curr=='-') && input[i-1]=='(') {
+        if(curr=='+') {
+          curr='$';
+        }
+        else {
+          curr='#';
+        }
       }
+      while(!opStack.empty() && precidense(curr)<precidense(opStack.top())) {
+        valQueue.push_back(opStack.top());
+        opStack.pop();
+      }
+      opStack.push(curr);
     }
-      //handle operands
-    else if(isdigit(input[i])){
-      valQueue.push(input[i]);
+    if(curr == '(') {
+      opStack.push(curr);
     }
-    else {
-      throw runtime_error("not a valid input for interpret");
+    if(curr == ')') {
+      while(opStack.top()!='(') {
+        valQueue.push_back(opStack.top());
+        opStack.pop();
+      }
+      opStack.pop();
     }
   }
   while(!opStack.empty()) {
-    valQueue.push(opStack.top());
+    valQueue.push_back(opStack.top());
     opStack.pop();
   }
+
+  while(!valQueue.empty()) {
+    cout << valQueue.front() << " ";
+    valQueue.pop_front();
+  }
+
   return valQueue;
 }
 
@@ -157,9 +170,32 @@ string Interpreter::convertVarToValue(string input) {
   return returnString;
 }
 
+Expression* Interpreter::buildExp(deque <char> postfix) {
+  stack<Expression*> expStack;
+  char curr = postfix.front();
+  string currStr(1,curr);
+  while(!postfix.empty() || isdigit(curr)) {
+    double var = stod(currStr);
+    expStack.push(new Value(var));
+    postfix.pop_front();
+    currStr = postfix.front();
+  }
+  Expression* left = new Value(postfix.front());
+  postfix.pop_front();
+  Expression* right = new Value(postfix.front());
+  postfix.pop_front();
+  switch (curr){
+    default: break;
+    case '+':
+  }
+
+
+}
 Expression* Interpreter::interpret(string input){
   input = convertVarToValue(input);
-  queue <char> postfix = convertInfixToPostfix(input);
+  deque <char> postfix = convertInfixToPostfix(input);
+  Expression* e = {nullptr};
+
 }
 
 

@@ -72,10 +72,11 @@ int main() {
     // 5
     Interpreter* i2 = new Interpreter();
     Expression* e5 = nullptr;
-    try {
+    //try {
         i2->setVariables("x=2;y=4");
         i2->setVariables("x=3");
         e5 = i2->interpret("2*(-(x+y))");
+        /*
         std::cout << "5: " << e5->calculate() << std::endl;//-14
         delete e5;
     } catch (const char* e) {
@@ -193,6 +194,7 @@ int main() {
         }
         std::cout << e << std::endl;
     }
+         */
     return 0;
 }
 

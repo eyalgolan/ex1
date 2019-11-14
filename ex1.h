@@ -9,13 +9,15 @@
 #include "string"
 #include <map>
 #include <queue>
+#include <stack>
 
 class Interpreter {
  private:
   map<string, string> inputs;
+  int precidense (char curr);
+  Expression* buildExp(deque <char> postfix);
   bool varValidation (string input);
-  queue<char> convertInfixToPostfix(string input);
-  string queueToString(queue<char>postfix);
+  deque<char> convertInfixToPostfix(string input);
   string convertVarToValue(string input);
  public:
   Interpreter(){};
