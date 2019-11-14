@@ -69,7 +69,13 @@ void Interpreter::setVariables (string input) {
         varName = varName + word[j];
       }
     }
-    this->inputs.insert(pair<string, string>(left, right));
+    map<string,string>::iterator repeatedVar = inputs.find(left);
+    if(repeatedVar != inputs.end()){
+      repeatedVar->second = right;
+    }
+    else {
+      this->inputs.insert(pair<string, string>(left, right));
+    }
   }
 }
 
