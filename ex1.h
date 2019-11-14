@@ -14,8 +14,8 @@
 class Interpreter {
  private:
   map<string, string> inputs;
-  int precidense (char);
-  Expression* buildExp(deque <char>);
+  int precidense (string);
+  Expression* buildExp(deque <string>);
   bool varValidation (string);
   deque<char> convertInfixToPostfix(string);
   string convertVarToValue(string);

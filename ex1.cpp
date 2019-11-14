@@ -79,8 +79,9 @@ void Interpreter::setVariables (string input) {
   }
 }
 
-int Interpreter::precidense(char curr) {
+int Interpreter::precidense(string currStr) {
   int pr = -1;
+  char curr = currStr[0];
   switch(curr) {
     default: break;
     case '+': pr=1; break;
@@ -92,6 +93,7 @@ int Interpreter::precidense(char curr) {
   }
   return pr;
 }
+/*
 deque<char> Interpreter::convertInfixToPostfix (string input) {
   stack <char> opStack;
   deque <char> valQueue;
@@ -147,6 +149,7 @@ deque<char> Interpreter::convertInfixToPostfix (string input) {
 
   return valQueue;
 }
+ */
 
 string Interpreter::convertVarToValue(string input) {
   int varCount=0;
@@ -176,10 +179,10 @@ string Interpreter::convertVarToValue(string input) {
   return returnString;
 }
 
-Expression* Interpreter::buildExp(deque <char> postfix) {
+Expression* Interpreter::buildExp(deque <string> postfix) {
   stack<Expression*> expStack;
-  char curr = postfix.front();
-  string currStr(1,curr);
+  string currStr = postfix.front();
+  //string currStr(1,curr);
   while(!postfix.empty() && isdigit(currStr[0])) {
     double var = stod(currStr);
     expStack.push(new Value(var));
@@ -223,7 +226,8 @@ Expression* Interpreter::buildExp(deque <char> postfix) {
   return expStack.top();
 }
 Expression* Interpreter::interpret(string input){
-  //----------------replace variables by numbers-------------------------//
+
+  //----------------replace variables by numbers--convertVarToValue-----------------------//
   int varCount=0;
   string varBuffer[this->inputs.size()];
   for(int i=0; i<input.length(); i++) {
@@ -248,43 +252,46 @@ Expression* Interpreter::interpret(string input){
     }
   }
 
+
   //-----------------------infix to postfix--------------------//
-  stack <char> opStack;
-  deque <char> valQueue;
+
+  stack <string> opStack;
+  deque <string> valQueue;
 
   for(int i=0; i<input.length(); i++) {
     char curr = input[i];
+    string currStr(1, curr);
     if(isdigit(curr)) {
-      valQueue.push_back(curr);
+      valQueue.push_back(currStr);
     }
-    else if(curr == '+' || curr == '-' || curr == '*' || curr == '/') {
-      if((curr=='+' || curr=='-') && i==0) {
-        if(curr=='+') {
-          curr='$';
+    else if(currStr == "+" || currStr == "-" || currStr == "*" || currStr == "/") {
+      if((currStr=="+" || currStr=="-") && i==0) {
+        if(currStr=="+") {
+          currStr="$";
         }
         else {
-          curr='#';
+          currStr="#";
         }
       }
-      else if ((curr=='+' || curr=='-') && input[i-1]=='(') {
-        if(curr=='+') {
-          curr='$';
+      else if ((currStr=="+" || currStr=="-") && input[i-1]=='(') {
+        if(currStr =="+") {
+          currStr="$";
         }
         else {
-          curr='#';
+          currStr="#";
         }
       }
-      while(!opStack.empty() && precidense(curr)<precidense(opStack.top())) {
+      while(!opStack.empty() && precidense(currStr)<precidense(opStack.top())) {
         valQueue.push_back(opStack.top());
         opStack.pop();
       }
-      opStack.push(curr);
+      opStack.push(currStr);
     }
     if(curr == '(') {
-      opStack.push(curr);
+      opStack.push(currStr);
     }
     if(curr == ')') {
-      while(opStack.top()!='(') {
+      while(opStack.top()!="(") {
         valQueue.push_back(opStack.top());
         opStack.pop();
       }
@@ -300,6 +307,7 @@ Expression* Interpreter::interpret(string input){
   //  cout << valQueue.front() << " ";
   //  valQueue.pop_front();
   //}
+
   Expression* e = buildExp(valQueue);
   return e;
 }
