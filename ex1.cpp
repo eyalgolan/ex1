@@ -262,6 +262,18 @@ Expression* Interpreter::interpret(string input){
     char curr = input[i];
     string currStr(1, curr);
     if(isdigit(curr)) {
+      if(i+1 < input.length()) {
+        if(input[i+1] == '.') {
+          int j = i+1;
+          while(!(currStr == "+" || currStr == "-" || currStr == "*" || currStr == "/") && j<input.length()) {
+            curr=input[j];
+            currStr=curr;
+            valQueue.push_back(currStr);
+            j++;
+          }
+          i=j;
+        }
+      }
       valQueue.push_back(currStr);
     }
     else if(currStr == "+" || currStr == "-" || currStr == "*" || currStr == "/") {
