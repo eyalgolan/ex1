@@ -153,7 +153,8 @@ string Interpreter::convertVarToValue(string input) {
       input.replace(pos, var.length(), value);
     }
   }
-  return input;
+  string returnString = input;
+  return returnString;
 }
 
 Expression* Interpreter::interpret(string input){
