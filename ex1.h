@@ -12,7 +12,7 @@
 
 class Interpreter {
  private:
-  map<string, double> inputs;
+  map<string, string> inputs;
   bool varValidation (string input);
   queue<char> convertInfixToPostfix(string input);
   string queueToString(queue<char>postfix);
@@ -21,7 +21,7 @@ class Interpreter {
   Interpreter(){};
   ~Interpreter(){};
   void setVariables (string input);
-  Expression* interpret (string input){};
+  Expression* interpret (string input);
 };
 
 class Value : public Expression{

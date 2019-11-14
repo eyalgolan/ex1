@@ -44,7 +44,7 @@ void Interpreter::setVariables (string input) {
           varName = varName + word[j];
         }
       }
-      this->inputs.insert(pair<string, double>(left, stod(right)));
+      this->inputs.insert(pair<string, string>(left, right));
       isExp = false;
       word = "";
       right="";
@@ -67,9 +67,8 @@ void Interpreter::setVariables (string input) {
         varName = varName + word[j];
       }
     }
-    this->inputs.insert(pair<string, double>(left, stod(right)));
+    this->inputs.insert(pair<string, string>(left, right));
   }
-
 }
 
 queue<char> Interpreter::convertInfixToPostfix (string input) {
@@ -85,6 +84,8 @@ queue<char> Interpreter::convertInfixToPostfix (string input) {
       if ((opStack.top()=='*' || opStack.top() == '/') && (input[i] == '+' || input[i] == '-'))
       {
         valQueue.push(opStack.top());
+        opStack.pop();
+        opStack.push(input[i]);
       }
 
         //check legal brackets order
@@ -128,24 +129,36 @@ queue<char> Interpreter::convertInfixToPostfix (string input) {
   return valQueue;
 }
 
-string Interpreter::queueToString(queue<char>postfix) {
-  string postfixInput[postfix.size()];
-  int i=0;
-  while(!postfix.empty()) {
-    postfixInput[i] = postfix.front();
-    postfix.pop();
-    i++;
-  }
-  return postfixInput;
-}
-
 string Interpreter::convertVarToValue(string input) {
+  int varCount=0;
+  string varBuffer[this->inputs.size()];
+  for(int i=0; i<input.length(); i++) {
+    if((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z')) {
+      while(input[i] != '+' && input[i] != '-' && input[i] != '*' && input[i] != '/' && input[i] != '(' && input[i] != ')') {
+        varBuffer[varCount] += input[i];
+        i++;
+      }
+      varCount++;
+    }
+  }
 
+  for(int j=0 ; j < varCount ; j++) {
+    if(this->inputs.find(varBuffer[j])==inputs.end()) {
+      throw runtime_error("no such variable");
+    }
+    else {
+      string var = inputs.find(varBuffer[j])->first;
+      string value = inputs.find(varBuffer[j])->second;
+      size_t pos = input.find(var);
+      input.replace(pos, var.length(), value);
+    }
+  }
+  return input;
 }
+
 Expression* Interpreter::interpret(string input){
   input = convertVarToValue(input);
-  queue <char> postfix = convertInfixToPostfix();
-  input = queueToString(postfix);
+  queue <char> postfix = convertInfixToPostfix(input);
 }
 
 
