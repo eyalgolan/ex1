@@ -14,11 +14,11 @@
 class Interpreter {
  private:
   map<string, string> inputs;
-  int precidense (char curr);
-  Expression* buildExp(deque <char> postfix);
-  bool varValidation (string input);
-  deque<char> convertInfixToPostfix(string input);
-  string convertVarToValue(string input);
+  int precidense (char);
+  Expression* buildExp(deque <char>);
+  bool varValidation (string);
+  deque<char> convertInfixToPostfix(string);
+  string convertVarToValue(string);
  public:
   Interpreter(){};
   ~Interpreter(){};

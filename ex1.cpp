@@ -157,7 +157,7 @@ string Interpreter::convertVarToValue(string input) {
 
   for(int j=0 ; j < varCount ; j++) {
     if(this->inputs.find(varBuffer[j])==inputs.end()) {
-      throw runtime_error("no such variable");
+      throw "no such variable";
     }
     else {
       string var = inputs.find(varBuffer[j])->first;
@@ -174,28 +174,128 @@ Expression* Interpreter::buildExp(deque <char> postfix) {
   stack<Expression*> expStack;
   char curr = postfix.front();
   string currStr(1,curr);
-  while(!postfix.empty() || isdigit(curr)) {
+  while(!postfix.empty() && isdigit(currStr[0])) {
     double var = stod(currStr);
     expStack.push(new Value(var));
     postfix.pop_front();
     currStr = postfix.front();
   }
-  Expression* left = new Value(postfix.front());
-  postfix.pop_front();
-  Expression* right = new Value(postfix.front());
-  postfix.pop_front();
-  switch (curr){
-    default: break;
-    case '+':
+
+  while(!postfix.empty()) {
+    if (currStr == "+" || currStr == "-" || currStr == "*" || currStr == "/") {
+      Expression *right = expStack.top();
+      expStack.pop();
+      Expression *left = expStack.top();
+      expStack.pop();
+      if (currStr == "+") {
+        Expression *plus = new Plus(left, right);
+        expStack.push(plus);
+      } else if (currStr == "-") {
+        Expression *minus = new Minus(left, right);
+        expStack.push(minus);
+      } else if (currStr == "*") {
+        Expression *mul = new Mul(left, right);
+        expStack.push(mul);
+      } else if (currStr == "/") {
+        Expression *div = new Div(left, right);
+        expStack.push(div);
+      }
+    } else if (currStr == "$" || currStr == "#") {
+      Expression *one = expStack.top();
+      expStack.pop();
+      if (currStr == "$") {
+        Expression *uplus = new UPlus(one);
+        expStack.push(uplus);
+      } else {
+        Expression *uminus = new UMinus(one);
+        expStack.push(uminus);
+      }
+    }
+    postfix.pop_front();
+    currStr = postfix.front();
   }
-
-
+  return expStack.top();
 }
 Expression* Interpreter::interpret(string input){
-  input = convertVarToValue(input);
-  deque <char> postfix = convertInfixToPostfix(input);
-  Expression* e = {nullptr};
+  //----------------replace variables by numbers-------------------------//
+  int varCount=0;
+  string varBuffer[this->inputs.size()];
+  for(int i=0; i<input.length(); i++) {
+    if((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z')) {
+      while(input[i] != '+' && input[i] != '-' && input[i] != '*' && input[i] != '/' && input[i] != '(' && input[i] != ')') {
+        varBuffer[varCount] += input[i];
+        i++;
+      }
+      varCount++;
+    }
+  }
 
+  for(int j=0 ; j < varCount ; j++) {
+    if(this->inputs.find(varBuffer[j])==inputs.end()) {
+      throw "no such variable";
+    }
+    else {
+      string var = inputs.find(varBuffer[j])->first;
+      string value = inputs.find(varBuffer[j])->second;
+      size_t pos = input.find(var);
+      input.replace(pos, var.length(), value);
+    }
+  }
+
+  //-----------------------infix to postfix--------------------//
+  stack <char> opStack;
+  deque <char> valQueue;
+
+  for(int i=0; i<input.length(); i++) {
+    char curr = input[i];
+    if(isdigit(curr)) {
+      valQueue.push_back(curr);
+    }
+    else if(curr == '+' || curr == '-' || curr == '*' || curr == '/') {
+      if((curr=='+' || curr=='-') && i==0) {
+        if(curr=='+') {
+          curr='$';
+        }
+        else {
+          curr='#';
+        }
+      }
+      else if ((curr=='+' || curr=='-') && input[i-1]=='(') {
+        if(curr=='+') {
+          curr='$';
+        }
+        else {
+          curr='#';
+        }
+      }
+      while(!opStack.empty() && precidense(curr)<precidense(opStack.top())) {
+        valQueue.push_back(opStack.top());
+        opStack.pop();
+      }
+      opStack.push(curr);
+    }
+    if(curr == '(') {
+      opStack.push(curr);
+    }
+    if(curr == ')') {
+      while(opStack.top()!='(') {
+        valQueue.push_back(opStack.top());
+        opStack.pop();
+      }
+      opStack.pop();
+    }
+  }
+  while(!opStack.empty()) {
+    valQueue.push_back(opStack.top());
+    opStack.pop();
+  }
+
+  //while(!valQueue.empty()) {
+  //  cout << valQueue.front() << " ";
+  //  valQueue.pop_front();
+  //}
+  Expression* e = buildExp(valQueue);
+  return e;
 }
 
 
@@ -275,9 +375,9 @@ double Mul::calculate() {
 }
 
 double Div::calculate() {
-  //if denominator is 0, throw runtime error
+  //if denominator is 0, throw error
   if (this->getRight()->calculate() == 0) {
-    throw runtime_error("Math Error: attempted divide by 0");
+    throw "Math Error: attempted divide by 0";
   }
   //otherwise calculate and return
   return this->getLeft()->calculate() / this->getRight()->calculate();
