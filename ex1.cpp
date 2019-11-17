@@ -15,10 +15,44 @@
 
 using namespace std;
 
+bool Interpreter::varValidation(string input) {
+  string curr;
+  string next;
+  for(unsigned int i=0; i<input.length(); i++) {
+    curr = input[i];
+    if(i+1<input.length()){
+      next = input[i+1];
+      if(curr == "/" || curr == "*" || curr == "(" || curr == ")") {
+        return false;
+      }
+      if((curr == "=" || curr == ";" || curr == ".") && (next == "=" || next == ";" || next == ".")) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+bool Interpreter::varNameValidation(string var) {
+  char curr;
+  for (unsigned int i = 0; i < var.length(); i++) {
+    curr = var[i];
+    if(i==0 && isdigit(curr)) {
+      return false;
+    }
+    if(curr == '.'){
+      return false;
+    }
+    if(!(isdigit(curr) || (curr >= 'a' && curr <= 'z') || (curr >= 'A' && curr <= 'Z') || (curr == '_'))) {
+      return false;
+    }
+  }
+  return true;
+}
 void Interpreter::setVariables (string input) {
-  //if (!varValidation(input)) {
-  //  throw runtime_error("incorrect input");
-  //}
+  if (!varValidation(input)) {
+    throw runtime_error("incorrect input");
+  }
   string word;
   string left;
   string right;
@@ -29,11 +63,19 @@ void Interpreter::setVariables (string input) {
       for (unsigned int j = 0; j < word.length(); j++) {
         if (word[j] == '=') {
           left = varName;
+          if(!varNameValidation(left)) {
+            throw "invalid input";
+          }
           varName = "";
           isExp = true;
         }
         else if (isExp) {
-          right = right + word[j];
+          if(!(isdigit(word[j]) || word[j] == '.')) {
+            throw "invalid input";
+          }
+          else {
+            right = right + word[j];
+          }
         }
         else {
           varName = varName + word[j];

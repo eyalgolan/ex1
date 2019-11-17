@@ -19,6 +19,8 @@ class Interpreter {
   bool isOperator(string);
   bool checkBrackets(string);
   bool checkOperators(string input);
+  bool varValidation(string input);
+  bool varNameValidation(string var);
  public:
   Interpreter(){};
   ~Interpreter(){};
