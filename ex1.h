@@ -79,8 +79,8 @@ class UMinus : public UnaryOperation {
 
 class BinaryOperation : public Expression {
  protected:
-  Expression* right {nullptr};
   Expression* left {nullptr};
+  Expression* right {nullptr};
 
  public:
   BinaryOperation(Expression* l, Expression* r) : left(l), right(r) {}
