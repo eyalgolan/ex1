@@ -233,7 +233,8 @@ Expression* Interpreter::interpret(string input){
   }
   //----------------replace variables by numbers--convertVarToValue-----------------------//
   unsigned int varCount=0;
-  string varBuffer[this->inputs.size()];
+  unsigned int bufferSize = this->inputs.size();
+  string varBuffer[bufferSize];
   for(unsigned int i=0; i<input.length(); i++) {
     if((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z')) {
       while(input[i] != '+' && input[i] != '-' && input[i] != '*' && input[i] != '/' && input[i] != '(' && input[i] != ')') {

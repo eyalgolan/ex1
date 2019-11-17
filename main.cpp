@@ -194,9 +194,9 @@ int main() {
     std::cout << e << std::endl;
   }
 
-  cout << "\nMY TESTS:\n" << endl;
+  cout << "\nExtra Tests:\n" << endl;
   //12 : var name 4x2 in setVariables
-  cout << "Test 12: var name 4x2 in setVariables:\n" << endl;
+  cout << "Test 12: var name 4x2 in setVariables:" << endl;
   Interpreter* i9 = new Interpreter();
   Expression* e12 = nullptr;
   try {
@@ -216,7 +216,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //13 : . in var name in setvariables
-  cout << "Test 13: . in var name in setvariables:\n" << endl;
+  cout << "\nTest 13: . in var name in setvariables:" << endl;
   Interpreter* i10 = new Interpreter();
   Expression* e13 = nullptr;
   try {
@@ -236,7 +236,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //14 : == in var name in setvariables
-  cout << "Test 14: == in var name in setvariables:\n" << endl;
+  cout << "\nTest 14: == in var name in setVariables:" << endl;
   Interpreter* i11 = new Interpreter();
   Expression* e14 = nullptr;
   try {
@@ -257,7 +257,7 @@ int main() {
   }
 
   //15 : no ; between assigments in setVariables
-  cout << "Test 15: no ; between assigments in setVariables:\n" << endl;
+  cout << "\nTest 15: no ; between assigments in setVariables:" << endl;
   Interpreter* i12 = new Interpreter();
   Expression* e15 = nullptr;
   try {
@@ -272,12 +272,13 @@ int main() {
       delete e15;
     }
     if (i12 != nullptr) {
-      delete e15;
+      delete i12;
     }
     std::cout << e << std::endl;
   }
-  return 0;
+
   //16 : two ; between assigments in setVariables
+  cout << "\nTest 16: two ; between assigments in setVariables:" << endl;
   Interpreter* i13 = new Interpreter();
   Expression* e16 = nullptr;
   try {
@@ -292,7 +293,47 @@ int main() {
       delete e16;
     }
     if (i13 != nullptr) {
-      delete e16;
+      delete i13;
+    }
+    std::cout << e << std::endl;
+  }
+  //17 : space instead of ; between assigments in setVariables
+  cout << "\nTest 17: space instead of ; between assigments in setVariables:" << endl;
+  Interpreter* i14 = new Interpreter();
+  Expression* e17 = nullptr;
+  try {
+    // 17
+    i14->setVariables("x2=14 y=8.5");
+    e17 = i14->interpret("-(-(-((x+0.5)**(y+(-3.5)))))"); //error
+    std::cout << "17: " << e17->calculate() << std::endl;
+    delete e17;
+    delete i14;
+  } catch (const char* e) {
+    if (e17 != nullptr) {
+      delete e17;
+    }
+    if (i14 != nullptr) {
+      delete i14;
+    }
+    std::cout << e << std::endl;
+  }
+  //18 : x2=14;y=8.5, -(x2)+(-y), should work
+  cout << "\nTest 18: x2=14;y=8.5, -(x)+(-y):" << endl;
+  Interpreter* i15 = new Interpreter();
+  Expression* e18 = nullptr;
+  try {
+    // 18
+    i15->setVariables("x2=14;y=8.5");
+    e18 = i15->interpret("-(x2)+(-y)"); //error
+    std::cout << "17: " << e18->calculate() << std::endl;
+    delete e18;
+    delete i15;
+  } catch (const char* e) {
+    if (e18 != nullptr) {
+      delete e18;
+    }
+    if (i15 != nullptr) {
+      delete i15;
     }
     std::cout << e << std::endl;
   }
