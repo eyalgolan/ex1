@@ -51,7 +51,7 @@ bool Interpreter::varNameValidation(string var) {
 }
 void Interpreter::setVariables (string input) {
   if (!varValidation(input)) {
-    throw runtime_error("incorrect input");
+    throw "incorrect input";
   }
   string word;
   string left;
