@@ -15,13 +15,6 @@
 
 using namespace std;
 
-bool Interpreter::varValidation(string input) {
-  regex stringPattern("([a-zA-Z]+[_a-zA-Z0-9]*=[0-9].?[0-9]+[0-9]*;)+");
-  if (regex_match(input, stringPattern)) {
-    return true;
-  }
-  return false;
-}
 void Interpreter::setVariables (string input) {
   //if (!varValidation(input)) {
   //  throw runtime_error("incorrect input");
@@ -31,9 +24,9 @@ void Interpreter::setVariables (string input) {
   string right;
   string varName;
   bool isExp = false;
-  for (int i = 0; i < input.length(); i++) {
+  for (unsigned int i = 0; i < input.length(); i++) {
     if (input[i] == ';') {
-      for (int j = 0; j < word.length(); j++) {
+      for (unsigned int j = 0; j < word.length(); j++) {
         if (word[j] == '=') {
           left = varName;
           varName = "";
@@ -56,7 +49,7 @@ void Interpreter::setVariables (string input) {
     }
   }
   if(input[input.length()-1] != ';') {
-    for (int j = 0; j < word.length(); j++) {
+    for (unsigned int j = 0; j < word.length(); j++) {
       if (word[j] == '=') {
         left = varName;
         varName = "";
@@ -92,88 +85,6 @@ int Interpreter::precidense(string currStr) {
     case '#': pr=3; break;
   }
   return pr;
-}
-/*
-deque<char> Interpreter::convertInfixToPostfix (string input) {
-  stack <char> opStack;
-  deque <char> valQueue;
-  for(int i=0; i<input.length(); i++) {
-    char curr = input[i];
-    if(isdigit(curr)) {
-      valQueue.push_back(curr);
-    }
-    else if(curr == '+' || curr == '-' || curr == '*' || curr == '/') {
-      if((curr=='+' || curr=='-') && i==0) {
-        if(curr=='+') {
-          curr='$';
-        }
-        else {
-          curr='#';
-        }
-      }
-      else if ((curr=='+' || curr=='-') && input[i-1]=='(') {
-        if(curr=='+') {
-          curr='$';
-        }
-        else {
-          curr='#';
-        }
-      }
-      while(!opStack.empty() && precidense(curr)<precidense(opStack.top())) {
-        valQueue.push_back(opStack.top());
-        opStack.pop();
-      }
-      opStack.push(curr);
-    }
-    if(curr == '(') {
-      opStack.push(curr);
-    }
-    if(curr == ')') {
-      while(opStack.top()!='(') {
-        valQueue.push_back(opStack.top());
-        opStack.pop();
-      }
-      opStack.pop();
-    }
-  }
-  while(!opStack.empty()) {
-    valQueue.push_back(opStack.top());
-    opStack.pop();
-  }
-  while(!valQueue.empty()) {
-    cout << valQueue.front() << " ";
-    valQueue.pop_front();
-  }
-  return valQueue;
-}
- */
-
-string Interpreter::convertVarToValue(string input) {
-  int varCount=0;
-  string varBuffer[this->inputs.size()];
-  for(int i=0; i<input.length(); i++) {
-    if((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z')) {
-      while(input[i] != '+' && input[i] != '-' && input[i] != '*' && input[i] != '/' && input[i] != '(' && input[i] != ')') {
-        varBuffer[varCount] += input[i];
-        i++;
-      }
-      varCount++;
-    }
-  }
-
-  for(int j=0 ; j < varCount ; j++) {
-    if(this->inputs.find(varBuffer[j])==inputs.end()) {
-      throw "no such variable";
-    }
-    else {
-      string var = inputs.find(varBuffer[j])->first;
-      string value = inputs.find(varBuffer[j])->second;
-      size_t pos = input.find(var);
-      input.replace(pos, var.length(), value);
-    }
-  }
-  string returnString = input;
-  return returnString;
 }
 
 Expression* Interpreter::buildExp(deque <string> postfix) {
@@ -225,12 +136,63 @@ bool Interpreter::isOperator(string op) {
   }
   return false;
 }
+bool Interpreter::checkBrackets(string input) {
+  stack <char> brackets;
+  for(unsigned int i=0; i<input.length(); i++) {
+    char currChar = input[i];
+    if(currChar == '(') {
+      brackets.push(currChar);
+    }
+    else if(currChar == ')') {
+      if(!brackets.empty()) {
+        brackets.pop();
+      }
+      else {
+        return false;
+      }
+    }
+  }
+  if(!brackets.empty()) {
+    return false;
+  }
+  return true;
+}
+bool Interpreter::checkOperators(string input) {
+  string curr;
+  string next;
+  for(unsigned int i=0; i<input.length(); i++) {
+    curr = input[i];
+    if(i+1<input.length()){
+      next = input[i+1];
+      if((curr == "+" || curr == "-" || curr == "/" || curr == "*" || curr == ".") &&
+          (next == "+" || next == "-" || next == "/" || next == "*" || next == ".")) {
+        return false;
+      }
+      if(curr == "-" && next == ")") {
+        return false;
+      }
+      if(curr == "(" && next == ")") {
+        return false;
+      }
+    }
+  }
+  return true;
+}
 Expression* Interpreter::interpret(string input){
-
+  //check brackets validity
+  bool vaildBrackets = checkBrackets(input);
+  if (!vaildBrackets) {
+    throw "invalid brackets";
+  }
+  //check operator validity (no *+ etc and no ..)
+  bool validOperators = checkOperators(input);
+  if (!validOperators) {
+    throw "illegal math expression";
+  }
   //----------------replace variables by numbers--convertVarToValue-----------------------//
-  int varCount=0;
+  unsigned int varCount=0;
   string varBuffer[this->inputs.size()];
-  for(int i=0; i<input.length(); i++) {
+  for(unsigned int i=0; i<input.length(); i++) {
     if((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z')) {
       while(input[i] != '+' && input[i] != '-' && input[i] != '*' && input[i] != '/' && input[i] != '(' && input[i] != ')') {
         varBuffer[varCount] += input[i];
@@ -240,7 +202,7 @@ Expression* Interpreter::interpret(string input){
     }
   }
 
-  for(int j=0 ; j < varCount ; j++) {
+  for(unsigned int j=0 ; j < varCount ; j++) {
     if(this->inputs.find(varBuffer[j])==inputs.end()) {
       throw "no such variable";
     }
@@ -257,7 +219,7 @@ Expression* Interpreter::interpret(string input){
 
   stack <string> opStack;
   deque <string> valQueue;
-  for(int i=0; i<input.length(); i++) {
+  for(unsigned int i=0; i<input.length(); i++) {
     string buffer = "";
     char currChar = input[i];
     string currStr(1, currChar);

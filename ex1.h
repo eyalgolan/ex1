@@ -16,10 +16,9 @@ class Interpreter {
   map<string, string> inputs;
   int precidense (string);
   Expression* buildExp(deque <string>);
-  bool varValidation (string);
   bool isOperator(string);
-  deque<char> convertInfixToPostfix(string);
-  string convertVarToValue(string);
+  bool checkBrackets(string);
+  bool checkOperators(string input);
  public:
   Interpreter(){};
   ~Interpreter(){};
@@ -31,7 +30,7 @@ class Value : public Expression{
  private:
   double number;
  public:
-  explicit Value(double number) : number(number){}
+  explicit Value(double n) : number(n){}
   virtual ~Value(){}
   double calculate() override;
 };
@@ -41,7 +40,7 @@ class Variable : public Expression {
   string name;
   double value;
  public:
-  Variable(string name, double value) : name(name), value(value) {}
+  Variable(string n, double v) : name(n), value(v) {}
   virtual ~Variable(){}
   double calculate() override;
   Variable& operator++();
@@ -58,7 +57,7 @@ class UnaryOperation : public Expression {
  protected:
   Expression* exp {nullptr};
  public:
-  explicit UnaryOperation(Expression* exp) : exp(exp) {}
+  explicit UnaryOperation(Expression* e) : exp(e) {}
   virtual ~UnaryOperation(){}
   Expression* getExp();
   void setExp(Expression* e);
@@ -66,14 +65,14 @@ class UnaryOperation : public Expression {
 
 class UPlus : public UnaryOperation {
  public:
-  explicit UPlus(Expression* exp) : UnaryOperation(exp) {}
+  explicit UPlus(Expression* e) : UnaryOperation(e) {}
   virtual ~UPlus(){}
   double calculate() override;
 };
 
 class UMinus : public UnaryOperation {
  public:
-  explicit UMinus(Expression* exp) : UnaryOperation(exp) {}
+  explicit UMinus(Expression* e) : UnaryOperation(e) {}
   virtual ~UMinus(){}
   double calculate() override;
 };
@@ -84,7 +83,7 @@ class BinaryOperation : public Expression {
   Expression* left {nullptr};
 
  public:
-  BinaryOperation(Expression* left, Expression* right) : left(left), right(right) {}
+  BinaryOperation(Expression* l, Expression* r) : left(l), right(r) {}
   virtual ~BinaryOperation(){}
   Expression* getRight();
   Expression* getLeft();
@@ -94,28 +93,28 @@ class BinaryOperation : public Expression {
 
 class Plus : public BinaryOperation{
  public:
-  Plus(Expression* left, Expression* right) : BinaryOperation(left, right){}
+  Plus(Expression* l, Expression* r) : BinaryOperation(l, r){}
   virtual ~Plus(){}
   double calculate() override;
 };
 
 class Minus : public BinaryOperation{
  public:
-  Minus(Expression* left, Expression* right) : BinaryOperation(left, right){}
+  Minus(Expression* l, Expression* r) : BinaryOperation(l, r){}
   virtual ~Minus(){}
   double calculate() override;
 };
 
 class Mul : public BinaryOperation{
  public:
-  Mul(Expression* left, Expression* right) : BinaryOperation(left, right){}
+  Mul(Expression* l, Expression* r) : BinaryOperation(l, r){}
   virtual ~Mul(){}
   double calculate() override;
 };
 
 class Div : public BinaryOperation{
  public:
-  Div(Expression* left, Expression* right) : BinaryOperation(left, right){}
+  Div(Expression* l, Expression* r) : BinaryOperation(l, r){}
   virtual ~Div(){}
   double calculate() override;
 };
