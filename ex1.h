@@ -17,6 +17,7 @@ class Interpreter {
   int precidense (string);
   Expression* buildExp(deque <string>);
   bool varValidation (string);
+  bool isOperator(string);
   deque<char> convertInfixToPostfix(string);
   string convertVarToValue(string);
  public:

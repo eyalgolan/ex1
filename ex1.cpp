@@ -97,7 +97,6 @@ int Interpreter::precidense(string currStr) {
 deque<char> Interpreter::convertInfixToPostfix (string input) {
   stack <char> opStack;
   deque <char> valQueue;
-
   for(int i=0; i<input.length(); i++) {
     char curr = input[i];
     if(isdigit(curr)) {
@@ -141,12 +140,10 @@ deque<char> Interpreter::convertInfixToPostfix (string input) {
     valQueue.push_back(opStack.top());
     opStack.pop();
   }
-
   while(!valQueue.empty()) {
     cout << valQueue.front() << " ";
     valQueue.pop_front();
   }
-
   return valQueue;
 }
  */
@@ -181,17 +178,16 @@ string Interpreter::convertVarToValue(string input) {
 
 Expression* Interpreter::buildExp(deque <string> postfix) {
   stack<Expression*> expStack;
-  string currStr = postfix.front();
+  string currStr;// = postfix.front();
   //string currStr(1,curr);
-  while(!postfix.empty() && isdigit(currStr[0])) {
-    double var = stod(currStr);
-    expStack.push(new Value(var));
-    postfix.pop_front();
-    currStr = postfix.front();
-  }
-
   while(!postfix.empty()) {
-    if (currStr == "+" || currStr == "-" || currStr == "*" || currStr == "/") {
+    currStr = postfix.front();
+    postfix.pop_front();
+    if(!isOperator(currStr)) {
+      double var = stod(currStr);
+      expStack.push(new Value(var));
+    }
+    else if (currStr == "+" || currStr == "-" || currStr == "*" || currStr == "/") {
       Expression *right = expStack.top();
       expStack.pop();
       Expression *left = expStack.top();
@@ -220,10 +216,14 @@ Expression* Interpreter::buildExp(deque <string> postfix) {
         expStack.push(uminus);
       }
     }
-    postfix.pop_front();
-    currStr = postfix.front();
   }
   return expStack.top();
+}
+bool Interpreter::isOperator(string op) {
+  if(op == "+" || op == "-" || op == "*" || op == "/" || op == "$" || op == "#" || op == "(" || op == ")") {
+    return true;
+  }
+  return false;
 }
 Expression* Interpreter::interpret(string input){
 
@@ -257,26 +257,23 @@ Expression* Interpreter::interpret(string input){
 
   stack <string> opStack;
   deque <string> valQueue;
-
   for(int i=0; i<input.length(); i++) {
-    char curr = input[i];
-    string currStr(1, curr);
-    if(isdigit(curr)) {
-      if(i+1 < input.length()) {
-        if(input[i+1] == '.') {
-          int j = i+1;
-          while(!(currStr == "+" || currStr == "-" || currStr == "*" || currStr == "/") && j<input.length()) {
-            curr=input[j];
-            currStr=curr;
-            valQueue.push_back(currStr);
-            j++;
-          }
-          i=j;
-        }
-      }
-      valQueue.push_back(currStr);
+    string buffer = "";
+    char currChar = input[i];
+    string currStr(1, currChar);
+    bool operandDetected = false;
+    while (!isOperator(currStr) && i < input.length()) {
+      operandDetected = true;
+      buffer += currStr;
+      i++;
+      currChar = input[i];
+      currStr = currChar;
     }
-    else if(currStr == "+" || currStr == "-" || currStr == "*" || currStr == "/") {
+    if(operandDetected) {
+      valQueue.push_back(buffer);
+      operandDetected = false;
+    }
+    if(currStr == "+" || currStr == "-" || currStr == "*" || currStr == "/") {
       if((currStr=="+" || currStr=="-") && i==0) {
         if(currStr=="+") {
           currStr="$";
@@ -299,10 +296,10 @@ Expression* Interpreter::interpret(string input){
       }
       opStack.push(currStr);
     }
-    if(curr == '(') {
+    if(currStr == "(") {
       opStack.push(currStr);
     }
-    if(curr == ')') {
+    if(currStr == ")") {
       while(opStack.top()!="(") {
         valQueue.push_back(opStack.top());
         opStack.pop();
@@ -327,7 +324,7 @@ Expression* Interpreter::interpret(string input){
 
 
 double Value::calculate() {
-    return this->number;
+  return this->number;
 }
 
 double Variable::calculate() {
@@ -349,12 +346,12 @@ Variable& Variable::operator-=(const Variable& toReduce) {
   this->value -= toReduce.value;
   return *this;
 }
-  //todo check if this works
+//todo check if this works
 Variable& Variable::operator++(int) {
   this->value += 1;
   return *this;
 }
-  //todo check if this works
+//todo check if this works
 Variable& Variable::operator--(int) {
   this->value -= 1;
   return *this;
