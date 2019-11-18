@@ -544,7 +544,7 @@ int main() {
   try {
     // 29
     i26->setVariables("x=5;y=4");
-    e29 = i26->interpret("-x+y");
+    e29 = i26->interpret("+x+y");
     std::cout << "29: " << e29->calculate() << std::endl; //should work
     delete e29;
     delete i26;
@@ -597,12 +597,113 @@ int main() {
     }
     std::cout << e << std::endl;
   }
+  //32 : x=1.6;y=4.0055530, -(x)+5
+  cout << "\nTest 32: x=1.6;y=4.0055530, -(x)+5: SHOULD WORK" << endl;
+  Interpreter* i29 = new Interpreter();
+  Expression* e32 = nullptr;
+  try {
+    // 32
+    i29->setVariables("x=1.6;y=4.0055530");
+    e32 = i29->interpret("-(x+y)+5");
+    std::cout << "32: " << e32->calculate() << std::endl; //should work
+    delete e32;
+    delete i29;
+  } catch (const char* e) {
+    if (e32 != nullptr) {
+      delete e32;
+    }
+    if (i29 != nullptr) {
+      delete i29;
+    }
+    std::cout << e << std::endl;
+  }
+  //33 : x=1.6;, -(+(-(x)))
+  cout << "\nTest 33: _x=1.6;, -(+(-(_x))): SHOULD WORK" << endl;
+  Interpreter* i30 = new Interpreter();
+  Expression* e33 = nullptr;
+  try {
+    // 33
+    i30->setVariables("_x=1.6;");
+    e33 = i30->interpret("-(+(-(_x)))");
+    std::cout << "33: " << e33->calculate() << std::endl; //should work
+    delete e33;
+    delete i30;
+  } catch (const char* e) {
+    if (e33 != nullptr) {
+      delete e33;
+    }
+    if (i30 != nullptr) {
+      delete i30;
+    }
+    std::cout << e << std::endl;
+  }
+  //34 : -(2*(3+4.2))
+  cout << "\nTest 34: -(2*(3+4.2)): SHOULD WORK" << endl;
+  Interpreter* i31 = new Interpreter();
+  Expression* e34 = nullptr;
+  try {
+    // 34
+    //i31->setVariables("_x=1.6;");
+    e34 = i31->interpret("-(2*(3+4.2))");
+    std::cout << "34: " << e34->calculate() << std::endl; //should work
+    delete e34;
+    delete i31;
+  } catch (const char* e) {
+    if (e34 != nullptr) {
+      delete e34;
+    }
+    if (i31 != nullptr) {
+      delete i31;
+    }
+    std::cout << e << std::endl;
+  }
+  //35 : 1.0-(-(-4.0))
+  cout << "\nTest 35: 1.0-(-(-4.0)): SHOULD WORK" << endl;
+  Interpreter* i32 = new Interpreter();
+  Expression* e35 = nullptr;
+  try {
+    // 35
+    //i32->setVariables("_x=1.6;");
+    e35 = i32->interpret("1.0-(-(-4.0))");
+    std::cout << "35: " << e35->calculate() << std::endl; //should work
+    delete e35;
+    delete i32;
+  } catch (const char* e) {
+    if (e35 != nullptr) {
+      delete e35;
+    }
+    if (i32 != nullptr) {
+      delete i32;
+    }
+    std::cout << e << std::endl;
+  }
+  //36 : x7.0=0.5, 56--x7.0
+  cout << "\nTest 36: x7.0=0.5, 56--x7.0: SHOULD WORK" << endl;
+  Interpreter* i33 = new Interpreter();
+  Expression* e36 = nullptr;
+  try {
+    // 36
+    i33->setVariables("x7.0=0.5");
+    e36 = i33->interpret("56--x7.0");
+    std::cout << "36: " << e36->calculate() << std::endl; //should work
+    delete e36;
+    delete i33;
+  } catch (const char* e) {
+    if (e36 != nullptr) {
+      delete e36;
+    }
+    if (i33 != nullptr) {
+      delete i33;
+    }
+    std::cout << e << std::endl;
+  }
   return 0;
 }
 
 /*
  * need to add tests:
- * x=1.6;y=4.0 // fine
+ * 56--x7.0
+ *
  *
  */
 /*

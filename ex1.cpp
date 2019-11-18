@@ -18,6 +18,9 @@ using namespace std;
 bool Interpreter::varValidation(string input) {
   string curr;
   string next;
+  if(input[0] == ';') {
+    return false;
+  }
   if(input.find('=') == string::npos) {
     return false;
   }
@@ -254,11 +257,11 @@ Expression* Interpreter::interpret(string input){
   string* varBuffer = new string[bufferSize];
   for(unsigned int i=0; i<input.length(); i++) {
     if(i + 1 < input.length()) {
-      if (input[i] == '-' && ((input[i+1] >= 'a' && input[i+1] <= 'z') || (input[i+1] >= 'A' && input[i+1] <= 'Z'))) {
+      if ((input[i] == '-' || input[i] =='+') && ((input[i+1] >= 'a' && input[i+1] <= 'z') || (input[i+1] >= 'A' && input[i+1] <= 'Z'))) {
         throw "invalid input";
       }
     }
-    if((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z')) {
+    if((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z') || (input[i] == '_')) {
       while(input[i] != '+' && input[i] != '-' && input[i] != '*' && input[i] != '/' && input[i] != '(' && input[i] != ')' && i<input.length()) {
         varBuffer[varCount] += input[i];
         i++;
@@ -427,7 +430,7 @@ double Mul::calculate() {
 double Div::calculate() {
   //if denominator is 0, throw error
   if (this->getRight()->calculate() == 0) {
-    throw "Math Error: attempted divide by 0";
+    throw "division by zero";
   }
   //otherwise calculate and return
   return this->getLeft()->calculate() / this->getRight()->calculate();
