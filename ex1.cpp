@@ -18,8 +18,17 @@ using namespace std;
 bool Interpreter::varValidation(string input) {
   string curr;
   string next;
+  if(input.find('=') == string::npos) {
+    return false;
+  }
   for(unsigned int i=0; i<input.length(); i++) {
     curr = input[i];
+    char currChar = curr[0];
+    if(!(isdigit(currChar) || (currChar >= 'a' && currChar <= 'z') ||
+    (currChar >= 'A' && currChar <= 'Z') || (currChar == '_') ||
+    (currChar == '.') || (currChar == '=') || (currChar == ';'))) {
+      return false;
+    }
     if(i+1<input.length()){
       next = input[i+1];
       if(curr == "/" || curr == "*" || curr == "(" || curr == ")") {
@@ -51,7 +60,7 @@ bool Interpreter::varNameValidation(string var) {
 }
 void Interpreter::setVariables (string input) {
   if (!varValidation(input)) {
-    throw "incorrect input";
+    throw "illegal variable assignment!";
   }
   string word;
   string left;

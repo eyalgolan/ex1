@@ -115,7 +115,7 @@ int main() {
     // 7
     i4->setVariables("x2=@;y=8.5");//error
     e7 = i4->interpret("-(-(-((x+0.5)*(y+(-3.5)))))");
-    std::cout << "7: " << e7->calculate() << std::endl;
+    std::cout << "7: " << e7->calculate() << std::endl; //error
     delete e7;
     delete i4;
   } catch (const char* e) {
@@ -324,8 +324,8 @@ int main() {
   try {
     // 18
     i15->setVariables("x2=14;y=8.5");
-    e18 = i15->interpret("-(x2)+(-y)"); //error
-    std::cout << "17: " << e18->calculate() << std::endl;
+    e18 = i15->interpret("-(x2)+(-y)");
+    std::cout << "18: " << e18->calculate() << std::endl;
     delete e18;
     delete i15;
   } catch (const char* e) {
@@ -337,10 +337,117 @@ int main() {
     }
     std::cout << e << std::endl;
   }
+  //19 : 4hello
+  cout << "\nTest 19: 4hello:" << endl;
+  Interpreter* i16 = new Interpreter();
+  Expression* e19 = nullptr;
+  try {
+    // 19
+    i16->setVariables("4hello");
+    e19 = i16->interpret("-(x2)+(-y)");
+    std::cout << "19: " << e19->calculate() << std::endl;
+    delete e19;
+    delete i16;
+  } catch (const char* e) {
+    if (e19 != nullptr) {
+      delete e19;
+    }
+    if (i16 != nullptr) {
+      delete i16;
+    }
+    std::cout << e << std::endl;
+  }
+  //20 : X4=5;y=177, should work
+  cout << "\nX4=5;y=177:" << endl;
+  Interpreter* i17 = new Interpreter();
+  Expression* e20 = nullptr;
+  try {
+    // 20
+    i17->setVariables("X4=5;y=177");
+    e20 = i17->interpret("-(X4)+(-y)");
+    std::cout << "20: " << e20->calculate() << std::endl;
+    delete e20;
+    delete i17;
+  } catch (const char* e) {
+    if (e20 != nullptr) {
+      delete e20;
+    }
+    if (i17 != nullptr) {
+      delete i17;
+    }
+    std::cout << e << std::endl;
+  }
+  //21 : X4_5=5;y=177
+  cout << "\nX4_5=5;y=177:" << endl;
+  Interpreter* i18 = new Interpreter();
+  Expression* e21 = nullptr;
+  try {
+    // 21
+    i18->setVariables("X4_5=5;y=177");
+    e21 = i18->interpret("-(X4_5)+(-y)");
+    std::cout << "21: " << e21->calculate() << std::endl; //error
+    delete e20;
+    delete i18;
+  } catch (const char* e) {
+    if (e21 != nullptr) {
+      delete e21;
+    }
+    if (i18 != nullptr) {
+      delete i18;
+    }
+    std::cout << e << std::endl;
+  }
+  //22 : x4.0=5;y=177
+  cout << "\nx4.0=5;y=177:" << endl;
+  Interpreter* i19 = new Interpreter();
+  Expression* e22 = nullptr;
+  try {
+    // 22
+    i19->setVariables("x4.0=5;y=177");
+    e22 = i19->interpret("-(x4.0)+(-y)");
+    std::cout << "22: " << e22->calculate() << std::endl; //error
+    delete e20;
+    delete i19;
+  } catch (const char* e) {
+    if (e22 != nullptr) {
+      delete e22;
+    }
+    if (i19 != nullptr) {
+      delete i19;
+    }
+    std::cout << e << std::endl;
+  }
+  //23 : x40=5;y$=177
+  cout << "\nx40=5;y$=177:" << endl;
+  Interpreter* i20 = new Interpreter();
+  Expression* e23 = nullptr;
+  try {
+    // 23
+    i19->setVariables("x40=5;y$=177");
+    e23 = i20->interpret("-(x40)+(-y$)");
+    std::cout << "23: " << e23->calculate() << std::endl; //error
+    delete e23;
+    delete i20;
+  } catch (const char* e) {
+    if (e23 != nullptr) {
+      delete e23;
+    }
+    if (i20 != nullptr) {
+      delete i20;
+    }
+    std::cout << e << std::endl;
+  }
   return 0;
 }
 
-
+/*
+ * need to add tests:
+ * x4==5 //error
+ * g.0=0.67 //error
+ * yz=34gh //error
+ * x=1.6;y=4.0 // fine
+ *
+ */
 /*
 1: -37.5
 2: 2
