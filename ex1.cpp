@@ -246,7 +246,7 @@ Expression* Interpreter::interpret(string input){
   string* varBuffer = new string[bufferSize];
   for(unsigned int i=0; i<input.length(); i++) {
     if((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z')) {
-      while(input[i] != '+' && input[i] != '-' && input[i] != '*' && input[i] != '/' && input[i] != '(' && input[i] != ')') {
+      while(input[i] != '+' && input[i] != '-' && input[i] != '*' && input[i] != '/' && input[i] != '(' && input[i] != ')' && i<input.length()) {
         varBuffer[varCount] += input[i];
         i++;
       }

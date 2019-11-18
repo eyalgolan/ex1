@@ -423,7 +423,7 @@ int main() {
   Expression* e23 = nullptr;
   try {
     // 23
-    i19->setVariables("x40=5;y$=177");
+    i20->setVariables("x40=5;y$=177");
     e23 = i20->interpret("-(x40)+(-y$)");
     std::cout << "23: " << e23->calculate() << std::endl; //error
     delete e23;
@@ -434,6 +434,46 @@ int main() {
     }
     if (i20 != nullptr) {
       delete i20;
+    }
+    std::cout << e << std::endl;
+  }
+  //24 : x=5, -3*x
+  cout << "\nx=5, -3*x:" << endl;
+  Interpreter* i21 = new Interpreter();
+  Expression* e24 = nullptr;
+  try {
+    // 24
+    i21->setVariables("x=5");
+    e24 = i21->interpret("-3*x");
+    std::cout << "24: " << e24->calculate() << std::endl; //should work
+    delete e24;
+    delete i21;
+  } catch (const char* e) {
+    if (e24 != nullptr) {
+      delete e24;
+    }
+    if (i21 != nullptr) {
+      delete i21;
+    }
+    std::cout << e << std::endl;
+  }
+  //25 : x=5, -(+(-(x)))
+  cout << "\nx=5, -(+(-(x))):" << endl;
+  Interpreter* i22 = new Interpreter();
+  Expression* e25 = nullptr;
+  try {
+    // 25
+    i22->setVariables("x=5");
+    e25 = i22->interpret("-(+(-(x)))");
+    std::cout << "25: " << e25->calculate() << std::endl; //should work
+    delete e25;
+    delete i22;
+  } catch (const char* e) {
+    if (e25 != nullptr) {
+      delete e25;
+    }
+    if (i22 != nullptr) {
+      delete i22;
     }
     std::cout << e << std::endl;
   }
