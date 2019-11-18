@@ -103,11 +103,19 @@ void Interpreter::setVariables (string input) {
     for (unsigned int j = 0; j < word.length(); j++) {
       if (word[j] == '=') {
         left = varName;
+        if(!varNameValidation(left)) {
+          throw "invalid input";
+        }
         varName = "";
         isExp = true;
       }
       else if (isExp) {
-        right = right + word[j];
+        if(!(isdigit(word[j]) || word[j] == '.')) {
+          throw "invalid input";
+        }
+        else {
+          right = right + word[j];
+        }
       }
       else {
         varName = varName + word[j];
@@ -245,6 +253,11 @@ Expression* Interpreter::interpret(string input){
   unsigned int bufferSize = this->inputs.size();
   string* varBuffer = new string[bufferSize];
   for(unsigned int i=0; i<input.length(); i++) {
+    if(i + 1 < input.length()) {
+      if (input[i] == '-' && ((input[i+1] >= 'a' && input[i+1] <= 'z') || (input[i+1] >= 'A' && input[i+1] <= 'Z'))) {
+        throw "invalid input";
+      }
+    }
     if((input[i] >= 'a' && input[i] <= 'z') || (input[i] >= 'A' && input[i] <= 'Z')) {
       while(input[i] != '+' && input[i] != '-' && input[i] != '*' && input[i] != '/' && input[i] != '(' && input[i] != ')' && i<input.length()) {
         varBuffer[varCount] += input[i];

@@ -318,13 +318,13 @@ int main() {
     std::cout << e << std::endl;
   }
   //18 : x2=14;y=8.5, -(x2)+(-y), should work
-  cout << "\nTest 18: x2=14;y=8.5, -(x)+(-y): SHOULD WORK" << endl;
+  cout << "\nTest 18: x2=14;y=8.5, -(-(x2)+(y)): SHOULD WORK" << endl;
   Interpreter* i15 = new Interpreter();
   Expression* e18 = nullptr;
   try {
     // 18
     i15->setVariables("x2=14;y=8.5");
-    e18 = i15->interpret("-(x2)+(-y)");
+    e18 = i15->interpret("-(-(x2)+(y))");
     std::cout << "18: " << e18->calculate() << std::endl;
     delete e18;
     delete i15;
@@ -364,7 +364,7 @@ int main() {
   try {
     // 20
     i17->setVariables("X4=5;y=177");
-    e20 = i17->interpret("-(X4)+(-y)");
+    e20 = i17->interpret("-(X4)-(y)");
     std::cout << "20: " << e20->calculate() << std::endl;
     delete e20;
     delete i17;
@@ -378,15 +378,15 @@ int main() {
     std::cout << e << std::endl;
   }
   //21 : X4_5=5;y=177
-  cout << "\nTest 21: X4_5=5;y=177: SHOULD GET ERROR" << endl;
+  cout << "\nTest 21: X4_5=5;y=177: SHOULD WORK" << endl;
   Interpreter* i18 = new Interpreter();
   Expression* e21 = nullptr;
   try {
     // 21
     i18->setVariables("X4_5=5;y=177");
-    e21 = i18->interpret("-(X4_5)+(-y)");
-    std::cout << "21: " << e21->calculate() << std::endl; //error
-    delete e20;
+    e21 = i18->interpret("-(X4_5)+(y)");
+    std::cout << "21: " << e21->calculate() << std::endl;
+    delete e21;
     delete i18;
   } catch (const char* e) {
     if (e21 != nullptr) {
@@ -404,9 +404,9 @@ int main() {
   try {
     // 22
     i19->setVariables("x4.0=5;y=177");
-    e22 = i19->interpret("-(x4.0)+(-y)");
+    e22 = i19->interpret("-(x4.0)-(y)");
     std::cout << "22: " << e22->calculate() << std::endl; //error
-    delete e20;
+    delete e22;
     delete i19;
   } catch (const char* e) {
     if (e22 != nullptr) {
@@ -424,7 +424,7 @@ int main() {
   try {
     // 23
     i20->setVariables("x40=5;y$=177");
-    e23 = i20->interpret("-(x40)+(-y$)");
+    e23 = i20->interpret("-(x40)+(y$)");
     std::cout << "23: " << e23->calculate() << std::endl; //error
     delete e23;
     delete i20;
@@ -477,14 +477,131 @@ int main() {
     }
     std::cout << e << std::endl;
   }
+  //26 : x=5;g.0=0.67, x+y
+  cout << "\nTest 26: x=5;g.0=0.67, x+y: SHOULD GET ERROR" << endl;
+  Interpreter* i23 = new Interpreter();
+  Expression* e26 = nullptr;
+  try {
+    // 26
+    i23->setVariables("x=5;g.0=0.67");
+    e26 = i23->interpret("x+g.0");
+    std::cout << "26: " << e26->calculate() << std::endl; //SHOULD GET ERROR
+    delete e26;
+    delete i23;
+  } catch (const char* e) {
+    if (e26 != nullptr) {
+      delete e26;
+    }
+    if (i23 != nullptr) {
+      delete i23;
+    }
+    std::cout << e << std::endl;
+  }
+  //27 : x=5;x4==5, x+y
+  cout << "\nTest 27: x=5;x4==5, x+y: SHOULD GET ERROR" << endl;
+  Interpreter* i24 = new Interpreter();
+  Expression* e27 = nullptr;
+  try {
+    // 27
+    i24->setVariables("x=5;x4==5");
+    e27 = i24->interpret("X4+g.0");
+    std::cout << "27: " << e27->calculate() << std::endl; //SHOULD GET ERROR
+    delete e27;
+    delete i24;
+  } catch (const char* e) {
+    if (e27 != nullptr) {
+      delete e27;
+    }
+    if (i24 != nullptr) {
+      delete i24;
+    }
+    std::cout << e << std::endl;
+  }
+  //28 : yz=34gh, y
+  cout << "\nTest 28: yz=34gh, y: SHOULD GET ERROR" << endl;
+  Interpreter* i25 = new Interpreter();
+  Expression* e28 = nullptr;
+  try {
+    // 28
+    i25->setVariables("yz=34gh");
+    e28 = i25->interpret("y+x");
+    std::cout << "28: " << e28->calculate() << std::endl; //should work
+    delete e28;
+    delete i25;
+  } catch (const char* e) {
+    if (e28 != nullptr) {
+      delete e28;
+    }
+    if (i25 != nullptr) {
+      delete i25;
+    }
+    std::cout << e << std::endl;
+  }
+  //29 : x=5;y=4, -x+y
+  cout << "\nTest 29: x=5;y=4, -x+y: SHOULD GET ERROR" << endl;
+  Interpreter* i26 = new Interpreter();
+  Expression* e29 = nullptr;
+  try {
+    // 29
+    i26->setVariables("x=5;y=4");
+    e29 = i26->interpret("-x+y");
+    std::cout << "29: " << e29->calculate() << std::endl; //should work
+    delete e29;
+    delete i26;
+  } catch (const char* e) {
+    if (e29 != nullptr) {
+      delete e29;
+    }
+    if (i26 != nullptr) {
+      delete i26;
+    }
+    std::cout << e << std::endl;
+  }
+  //30 : yz=34gh, yz
+  cout << "\nTest 30: yz=34gh, yz: SHOULD GET ERROR" << endl;
+  Interpreter* i27 = new Interpreter();
+  Expression* e30 = nullptr;
+  try {
+    // 30
+    i27->setVariables("yz=34gh");
+    e30 = i27->interpret("yz");
+    std::cout << "30: " << e30->calculate() << std::endl; //should get error
+    delete e30;
+    delete i27;
+  } catch (const char* e) {
+    if (e30 != nullptr) {
+      delete e30;
+    }
+    if (i27 != nullptr) {
+      delete i27;
+    }
+    std::cout << e << std::endl;
+  }
+  //31 : x=1.6;y=4.0, x+y
+  cout << "\nTest 31: x=1.6;y=4.0, x+y: SHOULD WORK" << endl;
+  Interpreter* i28 = new Interpreter();
+  Expression* e31 = nullptr;
+  try {
+    // 31
+    i28->setVariables("x=1.6;y=4.0");
+    e31 = i28->interpret("x+y");
+    std::cout << "31: " << e31->calculate() << std::endl; //should work
+    delete e31;
+    delete i28;
+  } catch (const char* e) {
+    if (e31 != nullptr) {
+      delete e31;
+    }
+    if (i28 != nullptr) {
+      delete i28;
+    }
+    std::cout << e << std::endl;
+  }
   return 0;
 }
 
 /*
  * need to add tests:
- * x4==5 //error
- * g.0=0.67 //error
- * yz=34gh //error
  * x=1.6;y=4.0 // fine
  *
  */
