@@ -678,14 +678,14 @@ int main() {
     std::cout << e << std::endl;
   }
   //36 : x7.0=0.5, 56--x7.0
-  cout << "\nTest 36: x7.0=0.5, 56--x7.0: SHOULD WORK" << endl;
+  cout << "\nTest 36: x7.0=0.5, 56--x7.0: SHOULD GET ERROR" << endl;
   Interpreter* i33 = new Interpreter();
   Expression* e36 = nullptr;
   try {
     // 36
     i33->setVariables("x7.0=0.5");
     e36 = i33->interpret("56--x7.0");
-    std::cout << "36: " << e36->calculate() << std::endl; //should work
+    std::cout << "36: " << e36->calculate() << std::endl; //should get error
     delete e36;
     delete i33;
   } catch (const char* e) {
