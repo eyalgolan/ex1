@@ -196,7 +196,7 @@ int main() {
 
   cout << "\nExtra Tests:\n" << endl;
   //12 : var name 4x2 in setVariables
-  cout << "Test 12: var name 4x2 in setVariables:" << endl;
+  cout << "Test 12: var name 4x2 in setVariables: SHOULD GET ERROR" << endl;
   Interpreter* i9 = new Interpreter();
   Expression* e12 = nullptr;
   try {
@@ -216,7 +216,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //13 : . in var name in setvariables
-  cout << "\nTest 13: . in var name in setvariables:" << endl;
+  cout << "\nTest 13: . in var name in setvariables: SHOULD GET ERROR" << endl;
   Interpreter* i10 = new Interpreter();
   Expression* e13 = nullptr;
   try {
@@ -236,7 +236,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //14 : == in var name in setvariables
-  cout << "\nTest 14: == in var name in setVariables:" << endl;
+  cout << "\nTest 14: == in var name in setVariables: SHOULD GET ERROR" << endl;
   Interpreter* i11 = new Interpreter();
   Expression* e14 = nullptr;
   try {
@@ -257,7 +257,7 @@ int main() {
   }
 
   //15 : no ; between assigments in setVariables
-  cout << "\nTest 15: no ; between assigments in setVariables:" << endl;
+  cout << "\nTest 15: no ; between assigments in setVariables: SHOULD GET ERROR" << endl;
   Interpreter* i12 = new Interpreter();
   Expression* e15 = nullptr;
   try {
@@ -278,7 +278,7 @@ int main() {
   }
 
   //16 : two ; between assigments in setVariables
-  cout << "\nTest 16: two ; between assigments in setVariables:" << endl;
+  cout << "\nTest 16: two ; between assigments in setVariables: SHOULD GET ERROR" << endl;
   Interpreter* i13 = new Interpreter();
   Expression* e16 = nullptr;
   try {
@@ -298,7 +298,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //17 : space instead of ; between assigments in setVariables
-  cout << "\nTest 17: space instead of ; between assigments in setVariables:" << endl;
+  cout << "\nTest 17: space instead of ; between assigments in setVariables: SHOULD GET ERROR" << endl;
   Interpreter* i14 = new Interpreter();
   Expression* e17 = nullptr;
   try {
@@ -318,7 +318,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //18 : x2=14;y=8.5, -(x2)+(-y), should work
-  cout << "\nTest 18: x2=14;y=8.5, -(x)+(-y):" << endl;
+  cout << "\nTest 18: x2=14;y=8.5, -(x)+(-y): SHOULD WORK" << endl;
   Interpreter* i15 = new Interpreter();
   Expression* e18 = nullptr;
   try {
@@ -338,7 +338,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //19 : 4hello
-  cout << "\nTest 19: 4hello:" << endl;
+  cout << "\nTest 19: 4hello: SHOULD GET ERROR" << endl;
   Interpreter* i16 = new Interpreter();
   Expression* e19 = nullptr;
   try {
@@ -358,7 +358,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //20 : X4=5;y=177, should work
-  cout << "\nX4=5;y=177:" << endl;
+  cout << "\nTest 20: X4=5;y=177: SHOULD WORK" << endl;
   Interpreter* i17 = new Interpreter();
   Expression* e20 = nullptr;
   try {
@@ -378,7 +378,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //21 : X4_5=5;y=177
-  cout << "\nX4_5=5;y=177:" << endl;
+  cout << "\nTest 21: X4_5=5;y=177: SHOULD GET ERROR" << endl;
   Interpreter* i18 = new Interpreter();
   Expression* e21 = nullptr;
   try {
@@ -398,7 +398,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //22 : x4.0=5;y=177
-  cout << "\nx4.0=5;y=177:" << endl;
+  cout << "\nTest 22: x4.0=5;y=177: SHOULD GET ERROR" << endl;
   Interpreter* i19 = new Interpreter();
   Expression* e22 = nullptr;
   try {
@@ -418,7 +418,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //23 : x40=5;y$=177
-  cout << "\nx40=5;y$=177:" << endl;
+  cout << "\nTest 23: x40=5;y$=177: SHOULD GET ERROR" << endl;
   Interpreter* i20 = new Interpreter();
   Expression* e23 = nullptr;
   try {
@@ -438,7 +438,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //24 : x=5, -3*x
-  cout << "\nx=5, -3*x:" << endl;
+  cout << "\nTest 24: x=5, -3*x: SHOULD WORK" << endl;
   Interpreter* i21 = new Interpreter();
   Expression* e24 = nullptr;
   try {
@@ -458,7 +458,7 @@ int main() {
     std::cout << e << std::endl;
   }
   //25 : x=5, -(+(-(x)))
-  cout << "\nx=5, -(+(-(x))):" << endl;
+  cout << "\nTest 25: x=5, -(+(-(x))): SHOULD WORK" << endl;
   Interpreter* i22 = new Interpreter();
   Expression* e25 = nullptr;
   try {
